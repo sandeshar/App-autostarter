@@ -1,0 +1,44 @@
+//Note:add this dependency:  implementation 'com.github.judemanutd:autostarter:1.0.8'
+//Add this in manifest: <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+                    
+                    String packageName = getActivity().getPackageName();
+                    PowerManager pm = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+                    if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                        try {
+                            //some device doesn't has activity to handle this intent
+                            //so add try catch
+                            Intent intent = new Intent();
+                            intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                            intent.setData(Uri.parse("package:" + packageName));
+                            startActivity(intent);
+                        } catch (Exception e) {
+                        }
+                    }
+                    else
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Autostart Permission");
+                            TextView tv = new TextView(getContext());
+                            tv.setText("If you don't recaive any notification sent by Bhimsen School. Your device should enable" +
+                                    " auto start Permission. To do it simply click Allow button below. You will be redirected to" +
+                                    " setting then allow Bhimsen School app. You are done!!");
+                            builder.setView(tv);
+                            builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    AutoStartPermissionHelper.getInstance().getAutoStartPermission(getContext());
+                                    AutoStartPermissionHelper.getInstance().isAutoStartPermissionAvailable(getContext());
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            builder.setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            builder.show();
+
+//Finished
+                        }
