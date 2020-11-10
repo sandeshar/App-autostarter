@@ -39,6 +39,5 @@
                                 }
                             });
                             builder.show();
-
-//Finished
                         }
+//Finished
